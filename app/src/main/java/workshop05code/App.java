@@ -57,14 +57,13 @@ public class App {
             String line;
             int i = 1;
             while ((line = br.readLine()) != null) {
-                System.out.println(line);
                 wordleDatabaseConnection.addValidWord(i, line);
                 i++;
             }
 
         } catch (IOException e) {
             System.out.println("Not able to load . Sorry!");
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, "Not able to load.", e);
             return;
         }
 
@@ -90,11 +89,11 @@ public class App {
                     guess = scanner.nextLine();
                 }
             } else {
-                System.out.print("This input is not allowed.");
+                logger.log(Level.WARNING, "This input is not allowed: " + guess);
             }
 
         } catch (NoSuchElementException | IllegalStateException e) {
-            e.printStackTrace();
+            logger.log(Level.WARNING, "Input not read properly.", e);
         }
 
     }

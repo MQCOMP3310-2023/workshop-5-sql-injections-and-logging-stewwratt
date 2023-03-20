@@ -64,12 +64,13 @@ public class SQLiteConnectionManager {
         try (Connection conn = DriverManager.getConnection(databaseURL)) {
             if (conn != null) {
                 DatabaseMetaData meta = conn.getMetaData();
-                System.out.println("The driver name is " + meta.getDriverName());
-                System.out.println("A new database has been created.");
+                // System.out.println("The driver name is " + meta.getDriverName());
+                // System.out.println("A new database has been created.");
 
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, "Database not created.", e);
+
         }
     }
 
@@ -88,7 +89,8 @@ public class SQLiteConnectionManager {
                     return true;
                 }
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING, "Connection was not defined.", e);
+
                 return false;
             }
         }
@@ -113,7 +115,7 @@ public class SQLiteConnectionManager {
                 return true;
 
             } catch (SQLException e) {
-                System.out.println(e.getMessage());
+                logger.log(Level.WARNING, "Tables not properly created.", e);
                 return false;
             }
         }
@@ -130,7 +132,7 @@ public class SQLiteConnectionManager {
         // Check if the word is a 4-letter string consisting only of lowercase
         
         if(!word.matches("^[a-z]{4}$")) {
-            System.out.println("Ignoring unacceptable input: " + word);
+            logger.log(Level.SEVERE, "Ignoring unacceptable input: " + word);
             return;
         }
 
@@ -141,8 +143,10 @@ public class SQLiteConnectionManager {
                 pstmt.setInt(1, id);
                 pstmt.setString(2, word);
                 pstmt.executeUpdate();
+
+                logger.log(Level.INFO, word);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, "Word not added.", e); 
         }
 
     }
@@ -169,7 +173,7 @@ public class SQLiteConnectionManager {
                 return false;
 
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            logger.log(Level.WARNING, "Word not validated.", e); 
             return false;
         }
 
