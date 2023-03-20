@@ -10,6 +10,7 @@ import java.io.FileInputStream;
 import java.util.logging.Level;
 import java.util.logging.LogManager;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -73,18 +74,25 @@ public class App {
             System.out.print("Enter a 4 letter word for a guess or q to quit: ");
             String guess = scanner.nextLine();
 
-            while (!guess.equals("q")) {
-                System.out.println("You've guessed '" + guess+"'.");
+            Pattern pattern = Pattern.compile("^[a-z]{4}$");
 
-                if (wordleDatabaseConnection.isValidWord(guess)) { 
-                    System.out.println("Success! It is in the the list.\n");
-                }else{
-                    System.out.println("Sorry. This word is NOT in the the list.\n");
+            if(pattern.matcher(guess).matches()) {
+                while (!guess.equals("q")) {
+                    System.out.println("You've guessed '" + guess+"'.");
+
+                    if (wordleDatabaseConnection.isValidWord(guess)) { 
+                        System.out.println("Success! It is in the the list.\n");
+                    }else{
+                        System.out.println("Sorry. This word is NOT in the the list.\n");
+                    }
+
+                    System.out.print("Enter a 4 letter word for a guess or q to quit: " );
+                    guess = scanner.nextLine();
                 }
-
-                System.out.print("Enter a 4 letter word for a guess or q to quit: " );
-                guess = scanner.nextLine();
+            } else {
+                System.out.print("This input is not allowed.");
             }
+
         } catch (NoSuchElementException | IllegalStateException e) {
             e.printStackTrace();
         }
